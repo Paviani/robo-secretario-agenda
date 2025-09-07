@@ -1,1 +1,9 @@
 credentials.json
+
+# Python
+__pycache__/
+*.pyc
+
+# Environment
+venv/
+.env
