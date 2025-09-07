@@ -1,4 +1,4 @@
-from flask import Flask, jasonify, request
+from flask import Flask, jsonify, request
 from agendador import encontrar_horarios_disponiveis, marcar_consulta
 from datetime import datetime, timedelta, timezone
 
