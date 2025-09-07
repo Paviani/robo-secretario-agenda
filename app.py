@@ -32,3 +32,7 @@ def encontrar_horarios():
 
     # Então, retornamos essa lista de textos no formato JSON, que é o padrão para APIs
     return jsonify(horarios_em_texto)
+
+@app.route("/marcar_consulta", methods=["POST"])
+def agendar_consulta():
+    return None
