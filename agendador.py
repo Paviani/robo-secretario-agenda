@@ -129,8 +129,14 @@ def marcar_consulta(calendar_id, nome_paciente, telefone_paciente, data_hora_ini
         
 # --- Bloco Principal de Execução (Exemplo de uso) ---
 if __name__ == '__main__':
+    from dotenv import load_dotenv
+    load_dotenv()
+
     # --- 1. CONFIGURAÇÕES ---
-    meus_calendarios = ['jarpaviani@gmail.com']
+    calendar_id = os.environ.get("CALENDAR_ID")
+    if not calendar_id:
+        raise ValueError("A variável de ambiente CALENDAR_ID não foi definida.")
+    meus_calendarios = [calendar_id]
     duracao_consulta = 50
     
     # --- 2. ENCONTRAR HORÁRIOS DISPONÍVEIS ---

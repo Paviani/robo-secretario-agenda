@@ -82,11 +82,13 @@ def encontrar_horarios_disponiveis(lista_ids_calendarios, data_inicio, data_fim,
 
 # --- Exemplo de uso ---
 if __name__ == '__main__':
-    meus_calendarios = [
-        'jarpaviani@gmail.com',
-        # Adicione aqui os IDs de outras agendas que você compartilhou, se quiser
-        # 'email_do_mestrado@exemplo.com',
-    ]
+    from dotenv import load_dotenv
+    load_dotenv()
+
+    calendar_id = os.environ.get("CALENDAR_ID")
+    if not calendar_id:
+        raise ValueError("A variável de ambiente CALENDAR_ID não foi definida.")
+    meus_calendarios = [calendar_id]
     
     # Definindo o período que queremos verificar (hoje e os próximos 7 dias)
     agora = datetime.now(timezone.utc)
