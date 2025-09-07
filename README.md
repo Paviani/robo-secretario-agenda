@@ -2,7 +2,7 @@
 
 Este projeto contém uma série de scripts Python para automatizar a gestão de agendas no Google Calendar. Ele foi projetado para encontrar horários disponíveis em uma ou mais agendas e, opcionalmente, marcar novos eventos (consultas, reuniões, etc.), atuando como um assistente de agendamento pessoal.
 
-## Funcionalidades e Scripts
+## Funcionalidades e Scripts do projeto
 
 O projeto é composto pelos seguintes scripts:
 
