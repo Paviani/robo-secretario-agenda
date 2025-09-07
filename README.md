@@ -14,7 +14,7 @@ O projeto é composto pelos seguintes scripts:
 
 -   `teste_escrita.py`: Um script de diagnóstico para verificar a permissão de escrita. Ele tenta criar um evento fixo na sua agenda principal. Use-o para garantir que o robô não só consegue ler, mas também criar eventos.
 
-## Configuração e Instalação
+## Configuração e Instalação do projeto
 
 Para utilizar este projeto, você precisará de uma conta Google e um projeto no Google Cloud Platform. Siga os passos abaixo.
 
