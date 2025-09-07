@@ -1,22 +1,72 @@
 # Robô Agendador para Google Calendar
 
-Este projeto contém uma série de scripts Python para automatizar a gestão de agendas no Google Calendar. Ele foi projetado para encontrar horários disponíveis em uma ou mais agendas e, opcionalmente, marcar novos eventos (consultas, reuniões, etc.), atuando como um assistente de agendamento pessoal.
+Este projeto automatiza a gestão de agendas no Google Calendar. Ele pode ser executado como um conjunto de scripts de linha de comando ou como uma API Web, permitindo encontrar horários disponíveis e marcar novos eventos (consultas, reuniões, etc.).
 
-## Funcionalidades e Scripts do projeto
+## Funcionalidades do Projeto
 
-O projeto é composto pelos seguintes scripts:
+O projeto oferece duas formas de uso: scripts individuais ou uma API Web.
 
--   `agendador.py`: O script principal. Ele busca por horários vagos (de acordo com uma duração definida) em uma ou mais agendas e, ao encontrar o primeiro disponível, marca uma consulta de exemplo. É o script mais completo, combinando a busca e a criação de eventos.
+### Scripts de Linha de Comando
 
--   `encontra-agenda.py`: Uma versão simplificada que apenas realiza a busca por horários disponíveis e os exibe no terminal. Não realiza nenhum agendamento, sendo útil para apenas consultar a disponibilidade.
+-   `agendador.py`: Script principal que busca por horários vagos e marca uma consulta de exemplo no primeiro horário encontrado.
+-   `encontra-agenda.py`: Versão simplificada que apenas realiza a busca por horários disponíveis e os exibe no terminal.
+-   `teste_conexao.py`: Script de diagnóstico para verificar a autenticação com a API do Google Calendar.
+-   `teste_escrita.py`: Script de diagnóstico para verificar a permissão de escrita, tentando criar um evento de teste.
 
--   `teste_conexao.py`: Um script de diagnóstico para verificar se a autenticação com a API do Google Calendar está funcionando corretamente. Ele lista todas as agendas às quais a sua conta de serviço tem acesso. É o primeiro script que você deve rodar para garantir que a configuração inicial está correta.
+### API Web com Flask (`app.py`)
 
--   `teste_escrita.py`: Um script de diagnóstico para verificar a permissão de escrita. Ele tenta criar um evento fixo na sua agenda principal. Use-o para garantir que o robô não só consegue ler, mas também criar eventos.
+-   `app.py`: Uma aplicação web construída com Flask que expõe a funcionalidade de agendamento através de uma API RESTful. Ideal para integrar com outras aplicações ou front-ends.
 
-## Configuração e Instalação do projeto
+## API Web com Flask
 
-Para utilizar este projeto, você precisará de uma conta Google e um projeto no Google Cloud Platform. Siga os passos abaixo.
+A API oferece endpoints para interagir com o agendador de forma programática.
+
+### Endpoint: `GET /encontrar_horarios`
+
+Busca por horários disponíveis na agenda configurada.
+
+-   **Método:** `GET`
+-   **Resposta de Sucesso (200 OK):** Um JSON contendo uma lista de horários disponíveis em formato de string [ISO 8601](https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Reference/Global_Objects/Date/toISOString).
+    ```json
+    [
+      "2023-10-27T14:00:00+00:00",
+      "2023-10-27T15:00:00+00:00",
+      "2023-10-27T16:00:00+00:00"
+    ]
+    ```
+
+### Endpoint: `POST /marcar_consulta`
+
+Agenda uma nova consulta no horário escolhido.
+
+-   **Método:** `POST`
+-   **Corpo da Requisição (JSON):**
+    ```json
+    {
+      "nome_paciente": "João da Silva",
+      "telefone_paciente": "+5511999998888",
+      "horario_escolhido": "2023-10-27T14:00:00+00:00"
+    }
+    ```
+-   **Respostas:**
+    -   **Sucesso (200 OK):**
+        ```json
+        {
+          "status": "sucesso",
+          "mensagem": "Consulta marcada com sucesso"
+        }
+        ```
+    -   **Erro (400 Bad Request):**
+        ```json
+        {
+          "status": "erro",
+          "mensagem": "Dados faltando"
+        }
+        ```
+
+## Configuração e Instalação
+
+Para utilizar este projeto, você precisará de uma conta Google e um projeto no Google Cloud Platform.
 
 ### Pré-requisitos
 - Python 3.6 ou superior.
@@ -24,83 +74,75 @@ Para utilizar este projeto, você precisará de uma conta Google e um projeto no
 
 ### 1. Configuração do Projeto no Google Cloud
 
+(As instruções para criar projeto, ativar API, criar Service Account e obter a chave JSON permanecem as mesmas)
+
 1.  **Crie um novo projeto** no [Google Cloud Console](https://console.cloud.google.com/).
-2.  **Ative a API do Google Calendar**:
-    - No menu de navegação, vá para "APIs & Services" > "Library".
-    - Procure por "Google Calendar API" e clique em "Enable".
-3.  **Crie uma Conta de Serviço (Service Account)**:
-    - No menu de navegação, vá para "IAM & Admin" > "Service Accounts".
-    - Clique em "+ CREATE SERVICE ACCOUNT".
-    - Dê um nome para a conta (ex: `robo-agendador`) e clique em "CREATE AND CONTINUE".
-    - **Não é necessário conceder acesso a um papel (role) neste passo**, pode clicar em "CONTINUE" e depois "DONE".
-4.  **Crie uma chave JSON para a Conta de Serviço**:
-    - Na lista de contas de serviço, encontre a que você acabou de criar.
-    - Clique nos três pontos (Ações) e selecione "Manage keys".
-    - Clique em "ADD KEY" > "Create new key".
-    - Escolha o formato **JSON** e clique em "CREATE". O download de um arquivo `.json` começará automaticamente.
-5.  **Renomeie e mova a chave**:
-    - Renomeie o arquivo baixado para `credentials.json`.
-    - Mova este arquivo para a pasta raiz deste projeto. **Este arquivo é secreto e não deve ser compartilhado ou exposto publicamente.**
+2.  **Ative a API do Google Calendar**.
+3.  **Crie uma Conta de Serviço (Service Account)**.
+4.  **Crie uma chave JSON** para a Conta de Serviço e renomeie-a para `credentials.json` na raiz do projeto.
 
 ### 2. Compartilhe sua Agenda
 
-Para que o robô possa ler e escrever na sua agenda, você precisa compartilhá-la com a conta de serviço.
+(As instruções para compartilhar a agenda com o e-mail da Service Account permanecem as mesmas)
 
-1.  **Encontre o e-mail da sua conta de serviço**. Ele estará nos detalhes da conta de serviço que você criou (parecido com `robo-agendador@seu-projeto.iam.gserviceaccount.com`).
-2.  **Abra o Google Calendar** no seu navegador.
-3.  Encontre a agenda que deseja automatizar, clique nos três pontos e vá em "Configurações e compartilhamento".
-4.  Na seção "Compartilhar com pessoas específicas", clique em "Adicionar pessoas".
-5.  Cole o e-mail da sua conta de serviço no campo de e-mail.
-6.  Em "Permissões", selecione **"Ver todos os detalhes do evento"** (para leitura) ou **"Fazer alterações nos eventos"** (para leitura e escrita). Para o `agendador.py` e `teste_escrita.py` funcionarem, a permissão de escrita é necessária.
-7.  Clique em "Enviar".
+Compartilhe sua agenda com o e-mail da conta de serviço, concedendo a permissão **"Fazer alterações nos eventos"**.
 
 ### 3. Instalação das Dependências
 
-Este projeto utiliza bibliotecas do Google para interagir com a API. Instale-as usando `pip`:
+Este projeto utiliza um arquivo `requirements.txt` para gerenciar suas dependências. Instale-as usando `pip`:
 
 ```bash
-pip install --upgrade google-api-python-client google-auth-httplib2 google-auth-oauthlib
+pip install -r requirements.txt
 ```
 
 ## Como Usar
 
-Depois de concluir a configuração, você pode executar os scripts.
+Depois de concluir a configuração, você pode executar os scripts ou a API Web.
 
-### 1. Verifique a Conexão
+### Opção 1: Executando os Scripts Individualmente
 
-Primeiro, rode o script `teste_conexao.py` para garantir que o robô consegue se autenticar e acessar as agendas que você compartilhou.
+Para tarefas específicas ou testes, você pode executar os scripts diretamente.
 
-```bash
-python teste_conexao.py
-```
-O resultado deve ser uma lista com os nomes das suas agendas.
-
-### 2. Verifique a Permissão de Escrita
-
-Em seguida, rode `teste_escrita.py` para confirmar que o robô pode criar eventos.
-
-```bash
-python teste_escrita.py
-```
-Se tudo der certo, um novo evento de teste chamado "Reunião de Alinhamento" aparecerá na sua agenda principal 5 minutos no futuro.
-
-### 3. Encontre Horários ou Agende Consultas
-
--   Para **apenas ver** os horários disponíveis:
+-   **Verificar a Conexão:**
+    ```bash
+    python teste_conexao.py
+    ```
+-   **Verificar a Permissão de Escrita:**
+    ```bash
+    python teste_escrita.py
+    ```
+-   **Encontrar Horários Disponíveis:**
     ```bash
     python encontra-agenda.py
     ```
--   Para **encontrar e agendar** uma consulta no primeiro horário livre:
+-   **Agendar uma Consulta (Exemplo):**
     ```bash
     python agendador.py
     ```
 
-### Configurando os Scripts
+### Opção 2: Executando a API Web
 
-Dentro dos arquivos `agendador.py` e `encontra-agenda.py`, você pode customizar as seguintes variáveis no início do script:
+Para expor a funcionalidade como um serviço, use o Flask.
 
--   `meus_calendarios`: Uma lista de IDs de calendários que o robô deve consultar. O ID principal é geralmente o seu endereço de e-mail.
--   `duracao_consulta`: A duração em minutos que o evento/reunião deve ter.
--   `inicio_busca` e `fim_busca`: O período em que o robô deve procurar por horários. Por padrão, ele busca nos próximos 7 dias.
+1.  **Exporte a variável de ambiente `FLASK_APP`**:
+    ```bash
+    # No Linux/macOS
+    export FLASK_APP=app.py
 
-No script `agendador.py`, você também pode alterar os detalhes do paciente/evento a ser marcado na seção `if __name__ == '__main__':`.
+    # No Windows (cmd)
+    set FLASK_APP=app.py
+    ```
+
+2.  **Inicie o servidor de desenvolvimento**:
+    ```bash
+    flask run
+    ```
+
+O servidor estará rodando em `http://127.0.0.1:5000`. Agora você pode fazer requisições para os endpoints `/encontrar_horarios` e `/marcar_consulta` usando ferramentas como `curl` ou Postman.
+
+### Configurando o Agendador
+
+Tanto os scripts quanto a API utilizam as seguintes variáveis globais definidas no topo dos arquivos `agendador.py` e `app.py`:
+
+-   `MEUS_CALENDARIOS`: Uma lista de IDs de calendários que o robô deve consultar. O ID principal é geralmente o seu endereço de e-mail.
+-   `DURACAO_CONSULTA`: A duração em minutos que o evento/reunião deve ter.
