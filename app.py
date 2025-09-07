@@ -2,7 +2,7 @@ from flask import Flask, jsonify, request
 from agendador import encontrar_horarios_disponiveis, marcar_consulta
 from datetime import datetime, timedelta, timezone
 
-MEUS_CALENDARIOS = ['jarpaviani@gmail.com'].
+MEUS_CALENDARIOS = ['jarpaviani@gmail.com']
 DURACAO_CONSULTA = 50 # Em minutos
 
 app = Flask(__name__)
