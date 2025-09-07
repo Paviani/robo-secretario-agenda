@@ -2,7 +2,7 @@ from flask import Flask, jsonify, request
 from agendador import encontrar_horarios_disponiveis, marcar_consulta
 from datetime import datetime, timedelta, timezone
 
-MEUS_CALENDARIOS = ['jarpaviani@gmail.com']
+MEUS_CALENDARIOS = ['jarpaviani@gmail.com'].
 DURACAO_CONSULTA = 50 # Em minutos
 
 app = Flask(__name__)
@@ -21,10 +21,10 @@ def encontrar_horarios():
 
     # 2. Chamar a função enccontrar_horários_disponiveis
     horarios_livres = encontrar_horarios_disponiveis(
-        lista_ids_calendarios=meus_calendarios,
-        data_inicio=inicio_busca,
-        data_fim=fim_busca,
-        duracao_minutos=duracao_consulta
+        lista_ids_calendarios = MEUS_CALENDARIOS,
+        data_inicio = inicio_busca,
+        data_fim = fim_busca,
+        duracao_minutos = DURACAO_CONSULTA
     )
 
     # Primeiro, criamos uma nova lista convertendo cada objeto datetime para texto no padrão ISO
@@ -53,7 +53,7 @@ def agendar_consulta():
         nome_paciente = nome,
         telefone_paciente = telefone,
         data_hora_inicio = data_hora_inicio,
-        duracao_minutos = DURAÇÃO_CONSULTA #usando a configuração global
+        duracao_minutos = DURACAO_CONSULTA #usando a configuração global
     )
     
     return jsonify({"status": "sucesso", "mensagem": "Consulta marcada com sucesso"})
