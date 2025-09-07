@@ -11,8 +11,13 @@ creds = service_account.Credentials.from_service_account_file(
         KEY_FILE_LOCATION, scopes=SCOPES)
 service = build('calendar', 'v3', credentials=creds)
 
+from dotenv import load_dotenv
+load_dotenv()
+
 # Este é o "endereço" da agenda onde o robô vai escrever.
-calendar_id = 'jarpaviani@gmail.com' 
+calendar_id = os.environ.get("CALENDAR_ID")
+if not calendar_id:
+    raise ValueError("A variável de ambiente CALENDAR_ID não foi definida.")
 
 # Criação de teste para evento daqui a 5 minutos
 now = datetime.now(timezone.utc)
