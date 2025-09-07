@@ -15,11 +15,9 @@ def hello_world():
 def encontrar_horarios():
 
  # 1. Preparamos os "ingredientes" para a nossa função
-    meus_calendarios = ['jarpaviani@gmail.com']
     agora = datetime.now(timezone.utc)
     inicio_busca = agora
     fim_busca = agora + timedelta(days=7)
-    duracao_consulta = 50
 
     # 2. Chamar a função enccontrar_horários_disponiveis
     horarios_livres = encontrar_horarios_disponiveis(
