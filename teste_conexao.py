@@ -1,4 +1,5 @@
 import os
+import pytest
 from google.oauth2 import service_account
 from googleapiclient.discovery import build
 
@@ -10,23 +11,23 @@ KEY_FILE_LOCATION = os.path.join(os.path.dirname(__file__), 'credentials.json')
 # Estamos dizendo que nosso robô quer acesso de leitura e escrita nos calendários.
 SCOPES = ['https://www.googleapis.com/auth/calendar']
 
-# 3. AUTENTICAÇÃO
-# Cria as credenciais do nosso robô a partir do arquivo JSON.
-creds = service_account.Credentials.from_service_account_file(
-        KEY_FILE_LOCATION, scopes=SCOPES)
 
-# 4. CONSTRUINDO O "CONTROLE REMOTO" DA API
-# Cria um objeto 'service' que sabe como "conversar" com a API do Google Agenda.
-service = build('calendar', 'v3', credentials=creds)
+def test_conexao():
+    """Verifica se a API do Google Agenda está acessível."""
+    if not os.path.exists(KEY_FILE_LOCATION):
+        pytest.skip("Arquivo de credenciais não encontrado.")
 
-print("Conexão bem-sucedida! Buscando agendas...")
+    try:
+        creds = service_account.Credentials.from_service_account_file(
+            KEY_FILE_LOCATION, scopes=SCOPES
+        )
+        service = build('calendar', 'v3', credentials=creds)
 
-# 5. EXECUTANDO A PRIMEIRA AÇÃO
-# Pede à API para listar todas as agendas na "lista de agendas" do nosso robô.
-calendar_list = service.calendarList().list().execute()
+        # 5. EXECUTANDO A PRIMEIRA AÇÃO
+        calendar_list = service.calendarList().list().execute()
 
-print("Agendas que o robô tem acesso:")
-# 6. MOSTRANDO O RESULTADO
-# Itera sobre a resposta e imprime o 'summary' (o nome) de cada agenda encontrada.
-for calendar_list_entry in calendar_list['items']:
-    print(f"- {calendar_list_entry['summary']}")
+        # 6. VERIFICANDO O RESULTADO
+        assert calendar_list.get('items'), "Lista de agendas vazia."
+    except Exception as e:
+        pytest.fail(f"Falha na autenticação ou conexão: {e}")
+

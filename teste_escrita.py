@@ -22,12 +22,12 @@ if not calendar_id:
 # Criação de teste para evento daqui a 5 minutos
 now = datetime.now(timezone.utc)
 start_time = now + timedelta(minutes=5)
-end_time = start_time + timedelta(minutes=45) # Duração de 15 minutos
+end_time = start_time + timedelta(minutes=15) # Duração de 15 minutos
 
 # Definindo os detalhes do evento
 event = {
   'summary': 'Reunião de Alinhamento',
-  'description': 'EDiscutir próximos passos do projeto Robô Secretário',
+  'description': 'Discutir próximos passos do projeto Robô Secretário',
   'start': {
     'dateTime': start_time.isoformat(),  # O .isoformat() de um objeto 'aware' já contém o fuso horário
   },

@@ -19,9 +19,9 @@ def encontrar_horarios_disponiveis(lista_ids_calendarios, data_inicio, data_fim,
     """
     # GARANTINDO QUE NOSSAS DATAS ESTÃO "CONSCIENTES" DO FUSO HORÁRIO UTC
     if data_inicio.tzinfo is None:
-        data_inicio = data_inicio.astimezone(timezone.utc)
+        data_inicio = data_inicio.replace(tzinfo=timezone.utc)
     if data_fim.tzinfo is None:
-        data_fim = data_fim.astimezone(timezone.utc)
+        data_fim = data_fim.replace(tzinfo=timezone.utc)
 
     # Montando a lista de agendas para a consulta
     items = [{"id": calendar_id} for calendar_id in lista_ids_calendarios]
