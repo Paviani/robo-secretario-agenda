@@ -33,9 +33,9 @@ Busca por horários disponíveis na agenda configurada.
 -   **Resposta de Sucesso (200 OK):** Um JSON contendo uma lista de horários disponíveis em formato de string [ISO 8601](https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Reference/Global_Objects/Date/toISOString).
     ```json
     [
-      "2023-10-27T14:00:00+00:00",
-      "2023-10-27T15:00:00+00:00",
-      "2023-10-27T16:00:00+00:00"
+      "AAAA-MM-DDTHH:MM:SS+00:00",
+      "AAAA-MM-DDTHH:MM:SS+00:00",
+      "AAAA-MM-DDTHH:MM:SS+00:00"
     ]
     ```
 
