@@ -2,6 +2,10 @@
 
 Este projeto automatiza a gestão de agendas no Google Calendar. Ele pode ser executado como um conjunto de scripts de linha de comando ou como uma API Web, permitindo encontrar horários disponíveis e marcar novos eventos (consultas, reuniões, etc.).
 
+## Segurança
+
+Para garantir que apenas aplicações autorizadas possam usar esta API, o acesso aos endpoints é protegido por uma Chave de API (API Key). Todas as requisições devem incluir um cabeçalho `X-API-Key` contendo a chave secreta definida.
+
 ## Funcionalidades do Projeto
 
 O projeto oferece duas formas de uso: scripts individuais ou uma API Web.
@@ -87,7 +91,11 @@ Para utilizar este projeto, você precisará de uma conta Google e um projeto no
 
 Compartilhe sua agenda com o e-mail da conta de serviço, concedendo a permissão **"Fazer alterações nos eventos"**.
 
-### 3. Instalação das Dependências
+### 3. Crie seu arquivo de configuração
+
+Renomeie o arquivo `.env.example` para `.env` e preencha as variáveis necessárias, como o `CALENDAR_ID` e a sua `API_KEY` secreta.
+
+### 4. Instalação das Dependências
 
 Este projeto utiliza um arquivo `requirements.txt` para gerenciar suas dependências. Instale-as usando `pip`:
 
